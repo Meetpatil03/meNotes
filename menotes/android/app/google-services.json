@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "447012714240",
+    "project_id": "menotes-de22f",
+    "storage_bucket": "menotes-de22f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:447012714240:android:b410bb99fd658542efa5e5",
+        "android_client_info": {
+          "package_name": "com.example.menotes"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA1P6AIjZp6RVbHehWuQcBBnNiBCpiv5e4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
