@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
+
 import 'package:menotes/utilities/custom_textfield.dart';
 
 class LoginView extends StatefulWidget {
@@ -12,6 +14,13 @@ class LoginView extends StatefulWidget {
 class _LoginViewState extends State<LoginView> with TickerProviderStateMixin {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -87,8 +96,12 @@ class _LoginViewState extends State<LoginView> with TickerProviderStateMixin {
                       Navigator.of(context).pushNamedAndRemoveUntil(
                           '/notes-view/', (route) => false);
                     }
-                  } catch (e) {
-                    print(e.toString());
+                  } on FirebaseAuthException catch (error) {
+                    if ("invalid-credential" == error.code) {
+                      print("Invalid Credential");
+                    }
+                  } catch (_) {
+                    print(_.toString());
                   }
                 },
                 child: const Text(

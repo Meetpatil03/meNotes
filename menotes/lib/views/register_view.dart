@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
+
 import 'package:flutter/material.dart';
+
 import 'package:menotes/utilities/custom_textfield.dart';
 
 class RegisterView extends StatefulWidget {
@@ -16,6 +17,14 @@ class _RegisterViewState extends State<RegisterView> {
   TextEditingController p2Controller = TextEditingController();
 
   @override
+  void dispose() {
+    emailController.dispose();
+    p1Controller.dispose();
+    p2Controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
@@ -23,100 +32,114 @@ class _RegisterViewState extends State<RegisterView> {
         title: const Text("Register"),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Column(
-          children: [
-            Image.asset(
-              'assets/images/register.png',
-              height: 340,
-              width: 340,
-            ),
-            CustomTextField(
-              controller: emailController,
-              labelText: 'Create a Email-Address',
-            ),
-            SizedBox(
-              height: size.height * 0.03,
-            ),
-            TextFormField(
-              controller: p1Controller,
-              obscureText: true,
-              decoration: InputDecoration(
-                labelText: 'Create-Password',
-                labelStyle: const TextStyle(
-                  fontSize: 24,
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: const BorderSide(color: Colors.orange),
-                ),
-                focusColor: Colors.blue,
-                enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(color: Colors.grey)),
-                contentPadding: const EdgeInsets.all(12),
-              ),
-            ),
-            SizedBox(
-              height: size.height * 0.03,
-            ),
-            TextFormField(
-              controller: p2Controller,
-              obscureText: true,
-              decoration: InputDecoration(
-                labelText: 'ReEnter-Password',
-                labelStyle: const TextStyle(
-                  fontSize: 24,
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: const BorderSide(color: Colors.orange),
-                ),
-                focusColor: Colors.blue,
-                enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(color: Colors.grey)),
-                contentPadding: const EdgeInsets.all(12),
-              ),
-            ),
-            SizedBox(
-              height: size.height * 0.03,
-            ),
-            TextButton(
-              onPressed: () async {
-                if (p1Controller.text == p2Controller.text &&
-                    emailController.text.isNotEmpty) {
-                  try {
-                    await FirebaseAuth.instance.createUserWithEmailAndPassword(
-                        email: emailController.text,
-                        password: p1Controller.text);
+      body: 
+         SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Column(
+                  children: [
+                    Image.asset(
+                      'assets/images/register.png',
+                      height: 340,
+                      width: 340,
+                    ),
+                    CustomTextField(
+                      controller: emailController,
+                      labelText: 'Create a Email-Address',
+                    ),
+                    SizedBox(
+                      height: size.height * 0.03,
+                    ),
+                    TextFormField(
+                      controller: p1Controller,
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        labelText: 'Create-Password',
+                        labelStyle: const TextStyle(
+                          fontSize: 24,
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(color: Colors.orange),
+                        ),
+                        focusColor: Colors.blue,
+                        enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: const BorderSide(color: Colors.grey)),
+                        contentPadding: const EdgeInsets.all(12),
+                      ),
+                    ),
+                    SizedBox(
+                      height: size.height * 0.03,
+                    ),
+                    TextFormField(
+                      controller: p2Controller,
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        labelText: 'ReEnter-Password',
+                        labelStyle: const TextStyle(
+                          fontSize: 24,
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(color: Colors.orange),
+                        ),
+                        focusColor: Colors.blue,
+                        enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: const BorderSide(color: Colors.grey)),
+                        contentPadding: const EdgeInsets.all(12),
+                      ),
+                    ),
+                    SizedBox(
+                      height: size.height * 0.03,
+                    ),
+                    TextButton(
+                      onPressed: () async {
+                        if (p1Controller.text == p2Controller.text &&
+                            emailController.text.isNotEmpty) {
+                          try {
+                            await FirebaseAuth.instance
+                                .createUserWithEmailAndPassword(
+                                    email: emailController.text,
+                                    password: p1Controller.text);
 
-                    Navigator.of(context).pushNamedAndRemoveUntil(
-                        '/verification-page/', (route) => false);
-                  } on FirebaseException catch (e) {
-                    print(e.toString());
-                  }
-                } else if (p1Controller.text != p2Controller.text) {
-                  await _dialogBuilder(context);
-                }
-              },
-              child: const Text(
-                "Register-My-Account",
-                style: TextStyle(fontSize: 18),
+                            Navigator.of(context).pushNamedAndRemoveUntil(
+                                '/verification-page/', (route) => false);
+                          } on FirebaseException catch (e) {
+                            print(e.toString());
+                            if ('email-Already-in-use' == e.code) {
+                              print("email Already in Use");
+                            } else if ('weak-password' == e.code) {
+                              print('Weak Password');
+                            } else if('invalid-email' == e.code) {
+                              print('invalid Email Entered');
+                            }
+                          }
+                        } else if (p1Controller.text != p2Controller.text) {
+                          await _dialogBuilder(context);
+                        }
+                      },
+                      child: const Text(
+                        "Register-My-Account",
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pushNamedAndRemoveUntil(
+                            '/login-view/', (route) => false);
+                      },
+                      child: const Text(
+                        "Already-have-Account/Login",
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context)
-                    .pushNamedAndRemoveUntil('/login-view/', (route) => false);
-              },
-              child: const Text("Already-have-Account/Login",
-                  style: TextStyle(fontSize: 18)),
-            ),
-          ],
-        ),
-      ),
+          
+        
+      
     );
   }
 }

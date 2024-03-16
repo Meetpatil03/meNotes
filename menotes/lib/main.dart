@@ -22,12 +22,13 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData.dark().copyWith(),
+      debugShowCheckedModeBanner: false,
       initialRoute: '/login-view/',
       routes: {
-        '/login-view/':(context) => const LoginView(),
-        '/register-view/':(context) => const RegisterView(),
-        '/verification-page/':(context) => const VerificationPage(),
-        '/notes-view/':(context) => const NotesView(), 
+        '/login-view/': (context) => const LoginView(),
+        '/register-view/': (context) => const RegisterView(),
+        '/verification-page/': (context) => const VerificationPage(),
+        '/notes-view/': (context) => const NotesView(),
       },
     );
   }

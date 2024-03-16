@@ -1,5 +1,3 @@
-import 'dart:js';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -10,11 +8,11 @@ class VerificationPage extends StatefulWidget {
   State<VerificationPage> createState() => _VerificationPageState();
 }
 
-Future<void> sendEmailVerification() async {
-  final user = FirebaseAuth.instance.currentUser;
+final user = FirebaseAuth.instance.currentUser;
 
+Future<void> sendEmailVerification() async {
   if (!user!.emailVerified) {
-    await user.sendEmailVerification();
+    await user!.sendEmailVerification();
   }
 }
 
@@ -22,6 +20,14 @@ class _VerificationPageState extends State<VerificationPage> {
   @override
   void initState() {
     super.initState();
+    sendEmailVerification();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _dialogBuilder(
+        context,
+        "Confirmation Email has been Sent",
+        "Please Check your Email inbox we have sent you an Confirmation Link for your account Verification, to Authorize that it's you who are signing in through our account",
+      );
+    });
   }
 
   @override
@@ -49,6 +55,7 @@ class _VerificationPageState extends State<VerificationPage> {
                 SizedBox(
                   height: size.height * 0.05,
                 ),
+
                 const Text(
                   " Verify your Email Register....! - Check your Email Inbox to verify your Account",
                   style: TextStyle(fontSize: 20),
@@ -72,7 +79,7 @@ class _VerificationPageState extends State<VerificationPage> {
                         '/login-view/', (route) => false);
                   },
                   child: const Text(
-                    "Restart-Application",
+                    "I-Have-Verified",
                     style: TextStyle(fontSize: 18),
                   ),
                 ),
@@ -83,10 +90,25 @@ class _VerificationPageState extends State<VerificationPage> {
   }
 }
 
-// Future<void> _dialogBuilder(
-//   BuildContext context,
-// ) {
-//   return showDialog(context: context, builder: (context) {
-//     return Alert
-//   });
-// }
+void _dialogBuilder(
+  BuildContext context,
+  String title,
+  String content,
+) {
+  showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(content),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text("Ok"),
+            ),
+          ],
+        );
+      });
+}
