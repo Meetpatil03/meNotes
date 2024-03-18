@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:menotes/constants/routes.dart';
 
 class VerificationPage extends StatefulWidget {
   const VerificationPage({super.key});
@@ -76,7 +77,7 @@ class _VerificationPageState extends State<VerificationPage> {
                 ElevatedButton(
                   onPressed: () {
                     Navigator.of(context).pushNamedAndRemoveUntil(
-                        '/login-view/', (route) => false);
+                        loginRoute, (route) => false);
                   },
                   child: const Text(
                     "I-Have-Verified",

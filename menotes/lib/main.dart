@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:menotes/constants/routes.dart';
 import 'package:menotes/views/login_view.dart';
 import 'package:menotes/views/notes_view.dart';
 import 'package:menotes/views/register_view.dart';
@@ -25,10 +26,10 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: '/login-view/',
       routes: {
-        '/login-view/': (context) => const LoginView(),
-        '/register-view/': (context) => const RegisterView(),
-        '/verification-page/': (context) => const VerificationPage(),
-        '/notes-view/': (context) => const NotesView(),
+        loginRoute: (context) => const LoginView(),
+        registerRoute: (context) => const RegisterView(),
+        verificationRoute: (context) => const VerificationPage(),
+        notesRoute: (context) => const NotesView(),
       },
     );
   }

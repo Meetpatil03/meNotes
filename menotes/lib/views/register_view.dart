@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
+import 'package:menotes/constants/routes.dart';
 
 import 'package:menotes/utilities/custom_textfield.dart';
 
@@ -104,7 +105,7 @@ class _RegisterViewState extends State<RegisterView> {
                                     password: p1Controller.text);
 
                             Navigator.of(context).pushNamedAndRemoveUntil(
-                                '/verification-page/', (route) => false);
+                                verificationRoute, (route) => false);
                           } on FirebaseException catch (e) {
                             print(e.toString());
                             if ('email-Already-in-use' == e.code) {
@@ -127,7 +128,7 @@ class _RegisterViewState extends State<RegisterView> {
                     TextButton(
                       onPressed: () {
                         Navigator.of(context).pushNamedAndRemoveUntil(
-                            '/login-view/', (route) => false);
+                            loginRoute, (route) => false);
                       },
                       child: const Text(
                         "Already-have-Account/Login",

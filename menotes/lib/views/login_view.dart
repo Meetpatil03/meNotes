@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
+import 'package:menotes/constants/routes.dart';
 
 import 'package:menotes/utilities/custom_textfield.dart';
+import 'package:menotes/utilities/show_errordialog.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -91,17 +93,19 @@ class _LoginViewState extends State<LoginView> with TickerProviderStateMixin {
                       await _dialogBuilder(context, 'Need-Email-Verification',
                           'Hey! your Credentials are right but you need to verify your Email once');
                       Navigator.of(context).pushNamedAndRemoveUntil(
-                          '/verification-page/', (route) => false);
+                          verificationRoute, (route) => false);
                     } else if (user.emailVerified) {
                       Navigator.of(context).pushNamedAndRemoveUntil(
-                          '/notes-view/', (route) => false);
+                          notesRoute, (route) => false);
                     }
                   } on FirebaseAuthException catch (error) {
                     if ("invalid-credential" == error.code) {
-                      print("Invalid Credential");
+                      await dialogBuilder(context, 'invalid Credentials');
+                    } else {
+                      await dialogBuilder(context, 'Error: ${error.code}');
                     }
                   } catch (_) {
-                    print(_.toString());
+                    await dialogBuilder(context, _.toString());
                   }
                 },
                 child: const Text(
@@ -111,8 +115,8 @@ class _LoginViewState extends State<LoginView> with TickerProviderStateMixin {
               ),
               TextButton(
                 onPressed: () {
-                  Navigator.of(context).pushNamedAndRemoveUntil(
-                      '/register-view/', (route) => false);
+                  Navigator.of(context)
+                      .pushNamedAndRemoveUntil(registerRoute, (route) => false);
                 },
                 child: const Text(
                   "Register for New_User",
