@@ -87,7 +87,7 @@ class _RegisterViewState extends State<RegisterView> {
                 focusColor: Colors.blue,
                 enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(color: Colors.grey)),
+                    borderSide: const BorderSide(color: Colors.grey),),
                 contentPadding: const EdgeInsets.all(12),
               ),
             ),
